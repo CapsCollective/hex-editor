@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/hex-editor/static/css/main.6b235a65.css",
+    "main.js": "/hex-editor/static/js/main.b9a1cc47.js",
+    "index.html": "/hex-editor/index.html",
+    "main.6b235a65.css.map": "/hex-editor/static/css/main.6b235a65.css.map",
+    "main.b9a1cc47.js.map": "/hex-editor/static/js/main.b9a1cc47.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6b235a65.css",
+    "static/js/main.b9a1cc47.js"
+  ]
+}
