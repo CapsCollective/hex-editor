@@ -1,6 +1,6 @@
 import {Component, createRef} from "react";
 import './map.scss';
-import {Terrain, TerrainColors, TerrainImages, Tile, TileMap} from "./tile";
+import {Terrain, TerrainColors, TerrainImages, Tile} from "./tile";
 import {MapContext} from "./map-context";
 
 const SCALE_X = 45; // 3/4 of the width (60)
