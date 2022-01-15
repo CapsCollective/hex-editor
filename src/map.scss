@@ -1,0 +1,10 @@
+﻿.tile {
+  >g {
+    opacity: 1;
+    transition: all 0.5s;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+  z-index: 0;
+}
