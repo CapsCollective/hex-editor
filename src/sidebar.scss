@@ -4,10 +4,11 @@
   position: fixed;
   right: 0;
   height: 100vh;
-  width: 200px;
+  width: 240px;
   background: #eee;
   box-shadow: -2px 0 6px rgba(0,0,0,0.2);
   z-index: 999;
+  overflow-y: scroll;
 }
 
 .terrainPicker {
@@ -23,7 +24,7 @@
 .saveButtons {
   margin: 10px 0;
   button {
-    min-width: 100px !important;
+    min-width: 110px !important;
   }
 }
 

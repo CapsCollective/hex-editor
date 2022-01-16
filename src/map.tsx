@@ -1,6 +1,6 @@
 import {Component, createRef} from "react";
 import './map.scss';
-import {Terrain, TerrainColors, TerrainImages, Tile} from "./tile";
+import {TerrainColors, TerrainImages, Tile} from "./tile";
 import {MapContext} from "./map-context";
 
 const SCALE_X = 45; // 3/4 of the width (60)
@@ -42,40 +42,23 @@ class Map extends Component<any, any> {
 	}
 	
 	centerMap = () => {
-		this.translateX = -60;
-		this.translateY = -400;
+		this.translateX = 0;
+		this.translateY = 0;
 		this.cameraRef.current.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`;
 	}
-	
-	select = (tile: Tile) => {
-		if(this.context.selected !== tile) this.context.setSelected(tile);
-		else this.context.setSelected(undefined);
-
-		if(this.context.terrainBrush !== Terrain.None) {
-			this.context.layout[tile.y][tile.x].terrain = this.context.terrainBrush;
-		}
-	}
-	
-	getNeighbours = (x: number, y: number): Tile[] => [
-		this.context.layout[y-1][x],
-		this.context.layout[y-(x%2)][x+1],
-		this.context.layout[y+1-(x%2)][x+1],
-		this.context.layout[y+1][x],
-		this.context.layout[y-(x%2)][x-1],
-		this.context.layout[y+1-(x%2)][x-1],
-	]
 
 	render = () => (
 		<svg style={{width: "100%", height: "100%", position: "relative"}}>
 			<g ref={this.cameraRef} onMouseDown={this.mouseDown}>
 				{this.context.flattenLayout().map((tile: Tile) =>
-					<a onClick={() => this.select(tile)} key={tile.id} className="tile">
+					<a onClick={() => this.context.select(tile)} key={tile.id} className="tile">
 						<g transform={`translate(${tile.x * SCALE_X}, ${(2 * tile.y + tile.x % 2) * SCALE_Y})`}>
 							<polygon
 								points="15, 0 45, 0 60, 26 45, 52 15, 52 0, 26"
 								fill={TerrainColors[tile.terrain]}
 								stroke={TerrainColors[tile.terrain]}
 								strokeWidth="1px"
+								opacity={this.context.selectedIsland?.id === tile.islandId ? 0.8 : 1 }
 							/>
 							{TerrainImages[tile.terrain]}
 						</g>

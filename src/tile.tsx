@@ -77,14 +77,20 @@ export const TerrainColors = {
 	[Terrain.Desert]: "#EED477"
 }
 
-export type TileMap = {[y: number]: {[x: number]: Tile}};
+export type Island = {
+	id: number;
+	name: string;
+	tiles: {x: number, y: number}[];
+}
 
+export type TileMap = {[y: number]: {[x: number]: Tile}};
 
 export type Tile = {
 	id: number,
 	x: number,
 	y: number,
 	terrain: Terrain,
+	islandId: number
 	discovered: boolean
 	structure: any // TODO: Structure Class
 }
