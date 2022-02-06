@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/hex-editor/static/css/main.c0c6d32c.css",
-    "main.js": "/hex-editor/static/js/main.251586bc.js",
+    "main.css": "/hex-editor/static/css/main.5ff0567d.css",
+    "main.js": "/hex-editor/static/js/main.1dc1abbc.js",
     "index.html": "/hex-editor/index.html",
-    "main.c0c6d32c.css.map": "/hex-editor/static/css/main.c0c6d32c.css.map",
-    "main.251586bc.js.map": "/hex-editor/static/js/main.251586bc.js.map"
+    "main.5ff0567d.css.map": "/hex-editor/static/css/main.5ff0567d.css.map",
+    "main.1dc1abbc.js.map": "/hex-editor/static/js/main.1dc1abbc.js.map"
   },
   "entrypoints": [
-    "static/css/main.c0c6d32c.css",
-    "static/js/main.251586bc.js"
+    "static/css/main.5ff0567d.css",
+    "static/js/main.1dc1abbc.js"
   ]
 }
