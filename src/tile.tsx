@@ -1,10 +1,10 @@
 export enum Terrain {
-	None,
-	Water,
-	Grass,
-	Jungle,
-	Mountain,
-	Desert
+	None = 'None',
+	Water = 'Water',
+	Grass = 'Grass',
+	Jungle = 'Jungle',
+	Mountain = 'Mountain',
+	Desert = 'Desert'
 }
 
 export const TerrainImages = {
@@ -68,6 +68,15 @@ export const TerrainImages = {
 	</g>
 }
 
+export const StructureTerrainColors = {
+	[Terrain.None]: "#666",
+	[Terrain.Water]: "#3b9ee2",
+	[Terrain.Grass]: "#60630c",
+	[Terrain.Jungle]: "#8fb637",
+	[Terrain.Mountain]: "#515265",
+	[Terrain.Desert]: "#ceaf41"
+}
+
 export const TerrainColors = {
 	[Terrain.None]: "#EBEBEB",
 	[Terrain.Water]: "#2471C0",
@@ -77,13 +86,13 @@ export const TerrainColors = {
 	[Terrain.Desert]: "#EED477"
 }
 
-export const TerrainNames = {
-	[Terrain.None]: "None",
-	[Terrain.Water]: "Water",
-	[Terrain.Grass]: "Grass",
-	[Terrain.Jungle]: "Jungle",
-	[Terrain.Mountain]: "Mountain",
-	[Terrain.Desert]: "Desert"
+export const DarkenedTerrainColors = {
+	[Terrain.None]: "#BCBCBC",
+	[Terrain.Water]: "#1D5A9A",
+	[Terrain.Grass]: "#82852D",
+	[Terrain.Jungle]: "#3A6706",
+	[Terrain.Mountain]: "#5F544F",
+	[Terrain.Desert]: "#E6C037"
 }
 
 export type IslandMap = {[id: number]: Island};
@@ -91,6 +100,7 @@ export type IslandMap = {[id: number]: Island};
 export type Island = {
 	name: string;
 	tiles: {x: number, y: number}[];
+	inventory: Inventory;
 }
 
 export type TileMap = {[y: number]: {[x: number]: Tile}};
@@ -100,7 +110,111 @@ export type Tile = {
 	x: number,
 	y: number,
 	terrain: Terrain,
-	islandId: number
-	discovered: boolean
-	structure: any // TODO: Structure Class
+	islandId: number,
+	discovered: boolean,
+	structure?: Structure
+}
+
+export enum Resource {
+	Treasure = 'Treasure',
+	Productivity = 'Productivity',
+	Food = 'Food',
+	Gold = 'Gold',
+	Wood = 'Wood',
+	Sand = 'Sand',
+	Glass = 'Glass',
+	Rumours = 'Rumours',
+	Clay = 'Clay',
+	Pots = 'Pots',
+	Bricks = 'Bricks',
+	Planks = 'Planks',
+	Iron = 'Iron',
+	Cotton = 'Cotton',
+	Cloth = 'Cloth',
+	Clothes = 'Clothes',
+	Coal = 'Coal',
+	Steel = 'Steel',
+	Sugar = 'Sugar',
+	Rum = 'Rum',
+	Tobacco = 'Tobacco',
+	Paper = 'Paper',
+	Cigar = 'Cigar',
+	Concrete = 'Concrete',
+	Weapons = 'Weapons',
+	Sails = 'Sails',
+	Ship = 'Ships'
+}
+
+export type Inventory = {[K in Resource]?: number};
+
+export type Structure = {
+	type: StructureType;
+	input?: Inventory;
+	output?: Inventory;
+	terrain? : Terrain; // Required terrain for structure
+	productivity?: number; // Required productivity to work tile
+	special?: boolean;
+}
+
+export enum StructureType {
+	None = 'None',
+	Market = 'Market',
+	Settlement = 'Settlement',
+	Tavern = 'Tavern',
+	ShipYard = 'Ship Yard',
+	GoldMine = 'Gold Mine',
+	IronMine = 'Iron Mine',
+	CoalMine = 'Coal Mine',
+	ClayPit = 'Clay Pit',
+	SandPit = 'Sand Pit',
+	Farm = 'Farm',
+	SugarPlantation = 'Sugar Plantation',
+	CottonPlantation = 'Cotton Plantation',
+	TobaccoPlantation = 'Tobacco Plantation',
+	Woodcutters = 'Woodcutters',
+	Smelter = 'Smelter',
+	BrickMaker = 'Brick Maker',
+	Potter = 'Potter',
+	Weavers = 'Weavers',
+	PaperMill = 'Paper Mill',
+	LoggingCamp = 'Logging Camp',
+	ConcreteFactory = 'Concrete Factory',
+	GlassBlowers = 'Glass Blowers',
+	Distillery = 'Distillery',
+	Tailor = 'Tailor',
+	SailMakers = 'Sail Makers',
+	CigarFactory = 'Cigar Factory',
+	Blacksmith = 'Blacksmith'
+}
+
+export const Structures: {[K in StructureType]?: Structure} = {
+	[StructureType.Market]: {
+		type: StructureType.Market,
+		special: true
+	},
+	[StructureType.Settlement]: {
+		type: StructureType.Settlement,
+		special: true
+	},
+	[StructureType.Farm]: {
+		type: StructureType.Farm,
+		terrain: Terrain.Grass,
+		output: {	[Resource.Food]: 2 }
+	},
+	[StructureType.GoldMine]: {
+		type: StructureType.GoldMine,
+		terrain: Terrain.Mountain,
+		output: {	[Resource.Gold]: 1 }
+	},
+	[StructureType.LoggingCamp]: {
+		type: StructureType.LoggingCamp,
+		terrain: Terrain.Jungle,
+		output: {	[Resource.Wood]: 1 }
+	},
+}
+
+export const ResourceCosts = {
+	[Resource.Gold]: 3,
+	[Resource.Food]: 1,
+	[Resource.Wood]: 2,
 }

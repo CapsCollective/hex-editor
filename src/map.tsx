@@ -1,6 +1,6 @@
 import {Component, createRef} from "react";
 import './map.scss';
-import {TerrainColors, TerrainImages, Tile} from "./tile";
+import {DarkenedTerrainColors, Terrain, TerrainColors, TerrainImages, Tile} from "./tile";
 import {MapContext} from "./map-context";
 
 const SCALE_X = 45; // 3/4 of the width (60)
@@ -55,11 +55,11 @@ class Map extends Component<any, any> {
 						<g transform={`translate(${tile.x * SCALE_X}, ${(2 * tile.y + tile.x % 2) * SCALE_Y})`}>
 							<polygon
 								points="15, 0 45, 0 60, 26 45, 52 15, 52 0, 26"
-								fill={TerrainColors[tile.terrain]}
-								stroke={TerrainColors[tile.terrain]}
+								fill={this.context.selectedTile === tile ? DarkenedTerrainColors[tile.terrain] : TerrainColors[tile.terrain]}
+								stroke={this.context.selectedTile === tile ? DarkenedTerrainColors[tile.terrain] : TerrainColors[tile.terrain]}
 								strokeWidth="1px"
 							/>
-							{TerrainImages[tile.terrain]}
+							{tile.structure ? TerrainImages[Terrain.None] : TerrainImages[tile.terrain]}
 						</g>
 					</a>
 				)}
