@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import './sidebar.scss';
 import {MapContext} from "./map-context";
-import {Resource, Structures, StructureType, Terrain} from "./tile";
+import {Resource, Structures, StructureType, Terrain} from "./types";
 import {Button, ButtonGroup, Divider, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {Check, Edit} from "@mui/icons-material";
 
@@ -89,7 +89,7 @@ const Sidebar = () => {
 				Island Size: {selectedIsland()!.tiles.length} Tiles
 			</p>
 			<h4>Inventory</h4>
-			{Object.entries(selectedIsland()!.inventory).map(([r, count]) => <p>
+			{Object.entries(selectedIsland()!.inventory).map(([r, count]) => <p key={r}>
 				{`${r as unknown as Resource}: ${count}`}
 			</p>)}
 			<h4>Building</h4>

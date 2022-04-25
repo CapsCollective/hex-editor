@@ -1,7 +1,8 @@
 import {Component, createRef} from "react";
 import './map.scss';
-import {DarkenedTerrainColors, Terrain, TerrainColors, TerrainImages, Tile} from "./tile";
+import { Terrain, Tile } from "./types";
 import {MapContext} from "./map-context";
+import {DarkenedTerrainColors, StructureIcons, StructureTerrainColors, TerrainColors, TerrainIcons} from "./icons";
 
 const SCALE_X = 45; // 3/4 of the width (60)
 const SCALE_Y = 26; // 1/2 of the height (52)
@@ -59,7 +60,7 @@ class Map extends Component<any, any> {
 								stroke={this.context.selectedTile === tile ? DarkenedTerrainColors[tile.terrain] : TerrainColors[tile.terrain]}
 								strokeWidth="1px"
 							/>
-							{tile.structure ? TerrainImages[Terrain.None] : TerrainImages[tile.terrain]}
+							{tile.structure ? StructureIcons(tile.structure.type, tile.terrain) : TerrainIcons(tile.terrain)}
 						</g>
 					</a>
 				)}

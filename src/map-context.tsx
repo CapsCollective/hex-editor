@@ -1,5 +1,5 @@
 import {createContext, PropsWithChildren, useEffect, useState} from "react";
-import {Island, IslandMap, Resource, StructureType, Terrain, Tile, TileMap} from "./tile";
+import {Island, IslandMap, Resource, ResourceCosts, StructureType, Terrain, TileMap, Tile} from "./types";
 import _ from "lodash";
 
 const CHUNK_WIDTH = 40;
@@ -114,32 +114,54 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 	const workIslands = () => Object.entries(islands).map(([_, island]) => workIsland(island));
 	
 	const workIsland = (island: Island) => {
+		console.log(`Working island ${island.name}`)
 		if (!island.inventory[Resource.Food]) island.inventory[Resource.Food] = 0;
-		if (!island.inventory[Resource.Gold]) island.inventory[Resource.Gold] = 0;
 
 		// Find max allowable production (by settlement and resource limits)
 		let buildingProductionLimit = 0;
+		let sellLimit = 0;
 		island.tiles.map((pos) => {
 			if (layout[pos.y][pos.x].structure?.type === StructureType.Settlement) buildingProductionLimit += 2;
+			if (layout[pos.y][pos.x].structure?.type === StructureType.Market) sellLimit++;
 		});
 		let maxProduction = Math.min(
 			buildingProductionLimit,
 			island.inventory[Resource.Food]!,
-			island.inventory[Resource.Gold]!
+			treasure
 		);
+		if (maxProduction < buildingProductionLimit) console.log("Not enough resources to fully work island");
 		let usedProduction = 0;
 		
 		island.tiles.map((pos) => {
 			if (usedProduction < maxProduction && workTile(layout[pos.y][pos.x])) usedProduction++;
 		});
 		
+		for (let i = 0; i < sellLimit; i++) {
+			const sellPriority = [
+				Resource.Gold,
+				Resource.Wood,
+				Resource.Food,
+			];
+			
+			for (const r of sellPriority) {
+				if (island.inventory[r] && island.inventory[r]! > 0) {
+					island.inventory[r]!--;
+					console.log(`Selling ${r}`);
+					setTreasure(prev => prev + ResourceCosts[r]!);
+					break;
+				}
+			}
+		}
+		
 		island.inventory[Resource.Food]! -= usedProduction;
-		island.inventory[Resource.Gold]! -= usedProduction;
+		setTreasure(prev => prev - usedProduction);
 	}
 	
 	const workTile = (tile: Tile): boolean => {
 		const island: Island = islands[tile.islandId];
-		if (tile.structure === undefined) return false;
+		if (tile.structure === undefined || tile.structure.special) return false;
+
+		console.log(`Working ${tile.structure.type} ${tile.x},${tile.y}`);
 		
 		if (tile.structure.input) {
 			// Verify that all inputs are valid before removing
@@ -151,7 +173,11 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 				// Init if undefined
 				if (!island.inventory[resource]) island.inventory[resource] = 0;
 
-				if (island.inventory[resource]! <= count) return false;
+				if (island.inventory[resource]! <= count) {
+					console.log(`Not enough ${resource} to work tile}`)
+					return false;
+				}
+				
 				toRemove.push({resource, count});
 			});
 			
@@ -160,12 +186,14 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 			})
 		}
 		
-		if(tile.structure.output) {
+		if (tile.structure.output) {
 			Object.entries(tile.structure.output).map(([r, count]) => {
 				const resource: Resource = r as unknown as Resource;
 				// Init if undefined
 				if (island.inventory[resource] === undefined) island.inventory[resource] = count;
 				else island.inventory[resource]! += count;
+				
+				console.log(`Producing ${resource} (${island.inventory[resource]})`)
 			});
 		}
 		
