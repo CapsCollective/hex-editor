@@ -5,10 +5,11 @@ import _ from "lodash";
 const CHUNK_WIDTH = 40;
 const CHUNK_HEIGHT = 30;
 
-type MapContextType = {
+export type MapContextType = {
 	selectedTile: Tile | undefined;
 	selectedIsland: () => Island | undefined;
 	selectTile: (value: Tile | undefined) => void;
+	getNeighbours: (x: number, y: number, r: number) => Tile[];
 	terrainBrush: Terrain;
 	setTerrainBrush: (value: Terrain) => void;
 	layout: TileMap,
@@ -56,7 +57,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 			// Find adjacent island(s), creating a new island if none found, appending to existing island if one found,
 			// or erroring if multiple found, preventing islands touching.
 			let islandId = tile.islandId;
-			for(let neighbour of getNeighbours(tile.x, tile.y)) {
+			for(let neighbour of getNeighbours(tile.x, tile.y, 1)) {
 				if(neighbour.islandId !== -1) {
 					if(islandId === -1 || islandId === neighbour.islandId) islandId = neighbour.islandId;
 					else {
@@ -139,8 +140,6 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 		for (let i = 0; i < sellLimit; i++) {
 			const sellPriority = [
 				Resource.Gold,
-				Resource.Wood,
-				Resource.Food,
 			];
 			
 			for (const r of sellPriority) {
@@ -229,14 +228,18 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 	
 	/* Utils */
 	
-	const getNeighbours = (x: number, y: number): Tile[] => [
-		layout[y-1][x],
-		layout[y-1+(x%2)][x+1],
-		layout[y+(x%2)][x+1],
-		layout[y+1][x],
-		layout[y-1+(x%2)][x-1],
-		layout[y+(x%2)][x-1],
-	];
+	const getNeighbours = (x: number, y: number, r: number): Tile[] => {
+		const n: Tile[] = [];
+		for(let i = -r; i <= r; i++) {
+			const abs = Math.abs(i);
+			for(let j = -r + Math.floor((x%2 + abs)/2); j <= r - Math.floor(((x+i)%2 + abs) /2); j++) {
+				if (y + j < 0 || y + j >= CHUNK_HEIGHT) continue;
+				const tile: Tile | undefined = layout[y + j][x + i];
+				if (tile) n.push(tile);
+			}
+		}
+		return n;
+	}
 	
 	const flattenLayout = (): Tile[] => Object.values(layout).flatMap(o => Object.values(o));
 	
@@ -247,6 +250,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 			selectedTile,
 			selectTile,
 			selectedIsland,
+			getNeighbours,
 			terrainBrush,
 			setTerrainBrush,
 			layout,

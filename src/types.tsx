@@ -28,8 +28,6 @@ export type Tile = {
 }
 
 export enum Resource {
-	Treasure = 'Treasure',
-	Productivity = 'Productivity',
 	Food = 'Food',
 	Gold = 'Gold',
 	Wood = 'Wood',
@@ -127,6 +125,8 @@ export const Structures: {[K in StructureType]?: Structure} = {
 
 export const ResourceCosts: {[K in Resource]?: number} = {
 	[Resource.Gold]: 3,
-	[Resource.Food]: 1,
-	[Resource.Wood]: 2,
+	[Resource.Pots]: 7,
+	[Resource.Clothes]: 12,
+	[Resource.Cigar]: 18,
+	[Resource.Weapons]: 25,
 }
