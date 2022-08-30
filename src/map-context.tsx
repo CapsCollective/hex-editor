@@ -121,7 +121,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 		// Find max allowable production (by settlement and resource limits)
 		let buildingProductionLimit = 0;
 		let sellLimit = 0;
-		island.tiles.map((pos) => {
+		island.tiles.forEach((pos) => {
 			if (layout[pos.y][pos.x].structure?.type === StructureType.Settlement) buildingProductionLimit += 2;
 			if (layout[pos.y][pos.x].structure?.type === StructureType.Market) sellLimit++;
 		});
@@ -133,7 +133,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 		if (maxProduction < buildingProductionLimit) console.log("Not enough resources to fully work island");
 		let usedProduction = 0;
 		
-		island.tiles.map((pos) => {
+		island.tiles.forEach((pos) => {
 			if (usedProduction < maxProduction && workTile(layout[pos.y][pos.x])) usedProduction++;
 		});
 		
@@ -166,7 +166,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 			// Verify that all inputs are valid before removing
 			const toRemove: { resource: Resource; count: number; }[] = [];
 			
-			Object.entries(tile.structure.input).map(([r, count]) => {
+			Object.entries(tile.structure.input).forEach(([r, count]) => {
 				const resource: Resource = r as unknown as Resource;
 
 				// Init if undefined
@@ -186,7 +186,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 		}
 		
 		if (tile.structure.output) {
-			Object.entries(tile.structure.output).map(([r, count]) => {
+			Object.entries(tile.structure.output).forEach(([r, count]) => {
 				const resource: Resource = r as unknown as Resource;
 				// Init if undefined
 				if (island.inventory[resource] === undefined) island.inventory[resource] = count;
