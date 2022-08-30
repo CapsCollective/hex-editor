@@ -180,7 +180,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 				toRemove.push({resource, count});
 			});
 			
-			toRemove.map((inventory) => {
+			toRemove.forEach((inventory) => {
 				island.inventory[inventory.resource]! -= inventory.count;
 			})
 		}
