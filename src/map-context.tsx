@@ -202,13 +202,14 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 	/* Save and Loading */
 	
 	type SaveFile = {
+		treasure: number,
 		layout: TileMap,
 		islands: IslandMap,
 		nextIslandId: number
 	}
 	
 	const save = (): string => {
-		const file = JSON.stringify({layout, islands, nextIslandId} as SaveFile);
+		const file = JSON.stringify({layout, islands, nextIslandId, treasure} as SaveFile);
 		localStorage.setItem("save", file);
 		return file;
 	}
@@ -224,6 +225,7 @@ export const MapProvider = ({children}: PropsWithChildren<Props>) => {
 		setLayout(parsed.layout || {});
 		setIslands(parsed.islands || {});
 		setNextIslandId(parsed.nextIslandId || 0);
+		setTreasure(parsed.treasure || 0)
 	}
 	
 	/* Utils */
